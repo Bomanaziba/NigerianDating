@@ -3,33 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp.API.Controllers {
+
+    [Authorize]
     [Route ("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase {
         private readonly DataContext _content;
 
         public ValuesController (DataContext _content) {
-
             this._content = _content;
-
         }
+
         // GET api/values
         [HttpGet]
-        public async Task<IActionResult> GetValues () {
-
+        public async Task<IActionResult> GetValues () 
+        {
             var values = await this._content.Values.ToListAsync();
 
             return Ok(values);
         }
 
-        // GET api/values/5
+        [AllowAnonymous]
         [HttpGet ("{id}")]
-        public async Task<IActionResult> GetValue (int id) {
-
+        public async Task<IActionResult> GetValue (int id) 
+        {
             var value = await this._content.Values.FirstOrDefaultAsync(x=>x.Id == id);
 
             return Ok(value);
