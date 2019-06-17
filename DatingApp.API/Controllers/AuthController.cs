@@ -10,19 +10,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DatingApp.API.Controllers {
+namespace DatingApp.API.Controllers 
+{
     [Route ("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase {
+    public class AuthController : ControllerBase 
+    {
         private readonly IAuthRepository _repo;
-        private readonly IConfiguration config;
-        public AuthController (IAuthRepository _repo, IConfiguration config) {
-            this.config = config;
+        private readonly IConfiguration _config;
+        public AuthController (IAuthRepository _repo, IConfiguration config) 
+        {
+            this._config = config;
             this._repo = _repo;
         }
 
         [HttpPost ("register")]
-        public async Task<IActionResult> Register (UserForRegisterDto userForRegisterDto) {
+        public async Task<IActionResult> Register (UserForRegisterDto userForRegisterDto) 
+        {
             userForRegisterDto.Username = userForRegisterDto.Username.ToLower ();
 
             if (await _repo.UserExists (userForRegisterDto.Username))
@@ -38,9 +42,10 @@ namespace DatingApp.API.Controllers {
         }
 
         [HttpPost ("login")]
-        public async Task<IActionResult> Login (UserForLoginDto userForLogInDto) {
+        public async Task<IActionResult> Login ([FromBody]UserForLoginDto userForLogInDto) 
+        {
 
-            var userFromRepo = await _repo.Login (userForLogInDto.Username.ToLower (), userForLogInDto.Password);
+            var userFromRepo = await _repo.Login (userForLogInDto.Username.ToLower(), userForLogInDto.Password);
 
             if (userFromRepo == null)
                 return Unauthorized ();
@@ -51,7 +56,7 @@ namespace DatingApp.API.Controllers {
             };
 
             var key = new SymmetricSecurityKey (Encoding.UTF8
-                .GetBytes (config.GetSection ("AppSettings:Token").Value));
+                .GetBytes (_config.GetSection ("AppSettings:Token").Value));
 
             var creds = new SigningCredentials (key, SecurityAlgorithms.HmacSha256Signature);
 
