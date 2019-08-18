@@ -28,7 +28,6 @@ namespace DatingApp.API.Data {
             var user = await _context.Users.Include (p => p.Photos).FirstOrDefaultAsync (u => u.UserId == id);
             return user;
         }
-
         public async Task<PagedList<User>> GetUsers (UserParams userParams) {
 
             var users = _context.Users.Include (p => p.Photos)
@@ -70,7 +69,6 @@ namespace DatingApp.API.Data {
 
             return await PagedList<User>.CreateAsync (users, userParams.PageNumber, userParams.PageSize);
         }
-
         private async Task<IEnumerable<int>> GetUserLikes (int userId, bool likers) {
 
             var user = await _context.Users
@@ -99,5 +97,47 @@ namespace DatingApp.API.Data {
                 u.LikerId == userId && u.LikeeId == recipientId);
         }
 
+        public async Task<Message> GetMessage (int messageId) {
+            return await _context.Messages.FirstOrDefaultAsync (m => m.MessageId == messageId);
+        }
+
+        public async Task<PagedList<Message>> GetMessagesForUser (MessageParams messageParams) {
+            var messages = _context.Messages
+                .Include (p => p.Sender).ThenInclude (z => z.Photos)
+                .Include (p => p.Recipient).ThenInclude (z => z.Photos)
+                .AsQueryable ();
+
+            switch (messageParams.MessageContainer) {
+                case "Inbox":
+                    messages = messages.Where (c => c.RecipientId == messageParams.UserId && c.RecipientDeleted == false);
+                    break;
+                case "Outbox":
+                    messages = messages.Where (c => c.SenderId == messageParams.UserId && c.SenderDeleted == false);
+                    break;
+                default:
+                    messages = messages.Where (c => c.RecipientId == messageParams.UserId && c.RecipientDeleted == false && c.IsRead == false);
+                    break;
+            }
+
+            messages = messages.OrderByDescending (x => x.MessageSent);
+
+            return await PagedList<Message>.CreateAsync (messages,
+                messageParams.PageNumber, messageParams.PageSize);
+        }
+
+        public async Task<IEnumerable<Message>> GetMessageThread (int userId, int recipientId) {
+            var messages = await _context.Messages
+                .Include (p => p.Sender).ThenInclude (z => z.Photos)
+                .Include (p => p.Recipient).ThenInclude (z => z.Photos)
+                .Where (p => p.RecipientId == userId && p.RecipientDeleted == false 
+                    && p.SenderId == recipientId 
+                    || p.RecipientId == recipientId 
+                    && p.SenderDeleted == false
+                    && p.SenderId == userId)
+                .OrderByDescending (q => q.MessageSent)
+                .ToListAsync ();
+
+            return messages;
+        }
     }
 }
