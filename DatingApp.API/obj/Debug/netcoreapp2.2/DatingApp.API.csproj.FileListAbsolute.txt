@@ -12,3 +12,17 @@ C:\Users\Automata\DatingApp\DatingApp.API\bin\Debug\netcoreapp2.2\DatingApp.API.
 C:\Users\Automata\DatingApp\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.RazorTargetAssemblyInfo.cache
 C:\Users\Automata\DatingApp\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.dll
 C:\Users\Automata\DatingApp\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.pdb
+C:\Users\boman\NigerianDating\DatingApp.API\bin\Debug\netcoreapp2.2\DatingApp.API.deps.json
+C:\Users\boman\NigerianDating\DatingApp.API\bin\Debug\netcoreapp2.2\DatingApp.API.runtimeconfig.json
+C:\Users\boman\NigerianDating\DatingApp.API\bin\Debug\netcoreapp2.2\DatingApp.API.runtimeconfig.dev.json
+C:\Users\boman\NigerianDating\DatingApp.API\bin\Debug\netcoreapp2.2\DatingApp.API.dll
+C:\Users\boman\NigerianDating\DatingApp.API\bin\Debug\netcoreapp2.2\DatingApp.API.pdb
+C:\Users\boman\NigerianDating\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.csprojAssemblyReference.cache
+C:\Users\boman\NigerianDating\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.csproj.CoreCompileInputs.cache
+C:\Users\boman\NigerianDating\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.RazorAssemblyInfo.cache
+C:\Users\boman\NigerianDating\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.RazorAssemblyInfo.cs
+C:\Users\boman\NigerianDating\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.AssemblyInfoInputs.cache
+C:\Users\boman\NigerianDating\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.AssemblyInfo.cs
+C:\Users\boman\NigerianDating\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.RazorTargetAssemblyInfo.cache
+C:\Users\boman\NigerianDating\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.dll
+C:\Users\boman\NigerianDating\DatingApp.API\obj\Debug\netcoreapp2.2\DatingApp.API.pdb
