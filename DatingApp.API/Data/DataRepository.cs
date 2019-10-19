@@ -21,11 +21,17 @@ namespace DatingApp.API.Data {
             _context.Remove (entity);
         }
         public async Task<Photo> GetPhoto (int id) {
-            var photo = await _context.Photos.FirstOrDefaultAsync (p => p.Id == id);
+            var photo = await _context.Photos.IgnoreQueryFilters()
+                .FirstOrDefaultAsync (p => p.Id == id);
             return photo;
         }
-        public async Task<User> GetUser (int id) {
-            var user = await _context.Users.Include (p => p.Photos).FirstOrDefaultAsync (u => u.UserId == id);
+        public async Task<User> GetUser (int id, bool isCurrentUser) 
+        {
+            var query = _context.Users.Include(p=>p.Photos).AsQueryable();
+            if(isCurrentUser) {
+                query = query.IgnoreQueryFilters();
+            }
+            var user = await query.FirstOrDefaultAsync (u => u.Id == id);
             return user;
         }
         public async Task<PagedList<User>> GetUsers (UserParams userParams) {
@@ -33,20 +39,20 @@ namespace DatingApp.API.Data {
             var users = _context.Users.Include (p => p.Photos)
                 .OrderByDescending (u => u.LastActive).AsQueryable ();
 
-            users = users.Where (u => u.UserId != userParams.UserId);
+            users = users.Where (u => u.Id != userParams.Id);
 
             users = users.Where (u => u.Gender == userParams.Gender);
 
             if (userParams.Likers) {
-                var userLikers = await GetUserLikes (userParams.UserId, userParams.Likers);
+                var userLikers = await GetUserLikes (userParams.Id, userParams.Likers);
 
-                users = users.Where (i => userLikers.Contains (i.UserId));
+                users = users.Where (i => userLikers.Contains (i.Id));
             }
 
             if (userParams.Likees) {
-                var userLikees = await GetUserLikes (userParams.UserId, userParams.Likers);
+                var userLikees = await GetUserLikes (userParams.Id, userParams.Likers);
 
-                users = users.Where (i => userLikees.Contains (i.UserId));
+                users = users.Where (i => userLikees.Contains (i.Id));
             }
 
             if (userParams.MinAge != 18 || userParams.MaxAge != 99) {
@@ -74,7 +80,7 @@ namespace DatingApp.API.Data {
             var user = await _context.Users
                 .Include (x => x.Likers)
                 .Include (x => x.Likees)
-                .FirstOrDefaultAsync (x => x.UserId == userId);
+                .FirstOrDefaultAsync (x => x.Id == userId);
 
             if (likers) {
                 return user.Likers.Where (x => x.LikeeId == userId).Select (i => i.LikerId);

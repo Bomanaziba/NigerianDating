@@ -14,7 +14,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 export class PhotoEditorComponent implements OnInit {
 
   @Input() photos: Photo[];
-  @Output() getMemberPhotoChange = new EventEmitter<string>()
+  @Output() getMemberPhotoChange = new EventEmitter<string>();
 
   public uploader: FileUploader;
   public hasBaseDropZoneOver = false;
@@ -53,7 +53,8 @@ export class PhotoEditorComponent implements OnInit {
           url: res.url,
           dateAdded: res.dateAdded,
           description: res.description,
-          isMain: res.isMain
+          isMain: res.isMain,
+          isApproved: res.isApproved
         };
         this.photos.push(photo);
         if (photo.isMain) {
@@ -66,7 +67,7 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   setMainPhoto(photo: Photo) {
-    this.userService.setMainPhoto(this.authService.decodedToken.nameid, photo.id).subscribe(() =>{
+    this.userService.setMainPhoto(this.authService.decodedToken.nameid, photo.id).subscribe(() => {
       this.currentMain = this.photos.filter(p => p.isMain === true)[0];
       this.currentMain.isMain = false;
       photo.isMain = true;
